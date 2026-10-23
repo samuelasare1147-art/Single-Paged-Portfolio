@@ -1,0 +1,21 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="500" height="314" viewBox="0 0 500 314" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Editable interior illustration" clip-path="url(#clip0_0_12)">
+<rect width="500" height="314" fill="#BFC8AF"/>
+<path id="Window opening" d="M36 100C36 44.7715 80.7715 0 136 0H146C201.228 0 246 44.7715 246 100V230H36V100Z" fill="#F6F5F1"/>
+<rect id="Window mullion" x="140" width="3" height="230" fill="#BFC8AF"/>
+<rect id="Art frame" x="372" y="36" width="68" height="76" fill="#252A24"/>
+<ellipse id="Art form" cx="406" cy="75" rx="20" ry="27" fill="#BFC8AF"/>
+<rect id="Ground plane" y="238" width="500" height="80" fill="#B2B6AB"/>
+<ellipse id="Rug" cx="255" cy="297" rx="175" ry="25" fill="#ECEEE6"/>
+<rect id="Sofa back" x="165" y="152" width="280" height="86" rx="14" fill="#F6F5F1"/>
+<rect id="Sofa seat" x="152" y="214" width="305" height="43" rx="8" fill="#ECEEE6"/>
+<rect id="Cushion" x="194" y="168" width="54" height="50" rx="6" transform="rotate(8 194 168)" fill="#B2B6AB"/>
+<rect id="Side table support" x="104" y="217" width="3" height="55" fill="#191B18"/>
+<ellipse id="Side table top" cx="108" cy="210" rx="48" ry="10" fill="#191B18"/>
+</g>
+<defs>
+<clipPath id="clip0_0_12">
+<rect width="500" height="314" fill="white"/>
+</clipPath>
+</defs>
+</svg>

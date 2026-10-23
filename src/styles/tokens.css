@@ -1,0 +1,31 @@
+:root {
+  --ink: #191b18;
+  --muted: #696c63;
+  --paper: #f6f5f1;
+  --line: #d5d7ce;
+  --lime: #d0f878;
+  --sage: #bfc8af;
+  --sage-deep: #b2b6ab;
+  --mist: #eceee6;
+  --ink-soft: #252a24;
+  --stone: #bfc4b9;
+  --line-dark: #454b40;
+  --white: #ffffff;
+
+  --display: "Founders Grotesk", "Arial Narrow", sans-serif;
+  --body: "Inter", sans-serif;
+
+  --pad: 64px;
+  --gutter: 80px;
+  --label: 360px;
+  --radius-card: 16px;
+  --radius-pill: 100px;
+}
+
+@media (max-width: 980px) {
+  :root {
+    --pad: 24px;
+    --gutter: 28px;
+    --label: 1fr;
+  }
+}
