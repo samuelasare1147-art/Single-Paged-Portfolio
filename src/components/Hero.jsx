@@ -1,5 +1,6 @@
 import { SiteHeader } from "./SiteHeader";
 import { profile } from "../data/content";
+import { motionProps } from "./sectionMotion";
 import { Icon, Pill } from "./ui";
 
 export function Hero() {
@@ -7,11 +8,11 @@ export function Hero() {
     <section className="intro" id="top">
       <SiteHeader />
       <div className="rule" />
-      <div className="edition">
+      <div className="edition" {...motionProps(0)}>
         <p>Independent perspective</p>
         <p>Folio / 2026</p>
       </div>
-      <div className="hero">
+      <div className="hero" {...motionProps(1)}>
         <h1>
           <span className="hero-line hero-line-primary">Useful by design.</span>
           <span className="hero-promise">
@@ -23,7 +24,7 @@ export function Hero() {
         </h1>
       </div>
       <div className="intro-grid">
-        <div className="identity">
+        <div className="identity" {...motionProps(2)}>
           <img
             className="portrait portrait-small"
             src="/assets/portrait.png"
@@ -44,15 +45,15 @@ export function Hero() {
             </p>
           </div>
         </div>
-        <div className="intro-copy">
+        <div className="intro-copy" {...motionProps(3)}>
           <p>{profile.summary}</p>
           <Pill href="#work">Explore my work</Pill>
         </div>
-        <p className="scroll-hint">
+        <a className="scroll-hint" href="#perspective" {...motionProps(4)}>
           SCROLL TO
           <br />
           DISCOVER ↓
-        </p>
+        </a>
       </div>
       <div className="rule" />
     </section>

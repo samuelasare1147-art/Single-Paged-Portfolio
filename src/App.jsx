@@ -1,5 +1,8 @@
 import { BackToTop } from "./components/BackToTop";
+import { FixedSiteHeader } from "./components/SiteHeader";
 import { Hero } from "./components/Hero";
+import { Loader } from "./components/Loader";
+import { motionProps, useSectionReveal } from "./components/sectionMotion";
 import { ArrowLink } from "./components/ui";
 import { Icon } from "./components/ui";
 import { DashboardPreview, InteriorPreview, TransitPreview } from "./components/Previews";
@@ -19,13 +22,17 @@ const previews = {
 };
 
 export default function App() {
+  useSectionReveal();
+
   return (
     <>
+      <Loader />
+      <FixedSiteHeader />
       <Hero />
 
-      <section className="band perspective">
-        <Chapter number="01 /" label="The way I see it" />
-        <div className="perspective-copy">
+      <section className="band perspective" id="perspective">
+        <Chapter number="01 /" label="The way I see it" motion />
+        <div className="perspective-copy" {...motionProps(1)}>
           <p className="statement">
             Good design doesn’t add complexity. It helps people find their way through it.
           </p>
@@ -37,7 +44,7 @@ export default function App() {
 
       <section className="work" id="work">
         <div className="rule inset" />
-        <div className="band work-heading">
+        <div className="band work-heading" {...motionProps(0)}>
           <Chapter number="02 /" label="Selected work" />
           <h2>
             Different contexts.
@@ -47,7 +54,7 @@ export default function App() {
         </div>
 
         {featuredWork.map((project) => (
-          <article className="project" key={project.id}>
+          <article className="project" key={project.id} {...motionProps(0)}>
             {previews[project.id]}
             <div className="project-info">
               <div>
@@ -70,13 +77,13 @@ export default function App() {
 
       <section className="archive-section">
         <div className="rule inset" />
-        <div className="band archive-heading">
+        <div className="band archive-heading" {...motionProps(0)}>
           <Chapter number="03 /" label="More from the archive" />
           <h2>A wider field of work.</h2>
         </div>
         <ul className="archive">
-          {archive.map((item) => (
-            <li key={item.name}>
+          {archive.map((item, index) => (
+            <li key={item.name} {...motionProps(index)}>
               <div>
                 <p className="archive-name">{item.name}</p>
                 <p className="eyebrow">{item.category}</p>
@@ -95,13 +102,13 @@ export default function App() {
             </li>
           ))}
         </ul>
-        <p className="body archive-note">
+        <p className="body archive-note" {...motionProps(0)}>
           Other web and mobile projects are in development and awaiting launch.
         </p>
       </section>
 
       <section className="capabilities">
-        <div className="band">
+        <div className="band" {...motionProps(0)}>
           <Chapter number="04 /" label="What I bring" tone="lime" />
           <h2>
             Thoughtful from the
@@ -110,8 +117,8 @@ export default function App() {
           </h2>
         </div>
         <div className="discipline-grid">
-          {disciplines.map((item) => (
-            <article key={item.number}>
+          {disciplines.map((item, index) => (
+            <article key={item.number} {...motionProps(index)}>
               <div className="rule rule-dark" />
               <div className="discipline-id">
                 <p>{item.number}</p>
@@ -123,14 +130,14 @@ export default function App() {
             </article>
           ))}
         </div>
-        <div className="craft">
+        <div className="craft" {...motionProps(0)}>
           <p className="eyebrow">Built with intention</p>
           <p>Mobile app design · Dashboard design · Figma · Product strategy · Documentation & reporting</p>
         </div>
       </section>
 
       <section className="process">
-        <div className="band">
+        <div className="band" {...motionProps(0)}>
           <Chapter number="05 /" label="How I work" />
           <h2>
             Less assumption.
@@ -139,8 +146,8 @@ export default function App() {
           </h2>
         </div>
         <ol className="steps">
-          {processSteps.map((step) => (
-            <li key={step.number}>
+          {processSteps.map((step, index) => (
+            <li key={step.number} {...motionProps(index)}>
               <div className="rule" />
               <p className="step-number">{step.number}</p>
               <h3>{step.title}</h3>
@@ -152,9 +159,9 @@ export default function App() {
 
       <section className="about" id="about">
         <div className="rule inset" />
-        <Chapter number="06 /" label="The person behind the pixels" />
+        <Chapter number="06 /" label="The person behind the pixels" motion />
         <div className="about-grid">
-          <figure>
+          <figure {...motionProps(1)}>
             <img
               className="portrait portrait-large"
               src="/assets/portrait.png"
@@ -167,7 +174,7 @@ export default function App() {
               <span>Adenta, Accra / GH</span>
             </figcaption>
           </figure>
-          <div>
+          <div {...motionProps(2)}>
             <h2>
               A designer’s eye.
               <br />
@@ -191,13 +198,13 @@ export default function App() {
 
       <section className="experience" id="experience">
         <div className="rule inset" />
-        <div className="band experience-heading">
+        <div className="band experience-heading" {...motionProps(0)}>
           <Chapter number="07 /" label="Experience & learning" />
           <h2>Where craft meets execution.</h2>
         </div>
         <div className="roles">
-          {experience.map((role) => (
-            <article key={role.company}>
+          {experience.map((role, index) => (
+            <article key={role.company} {...motionProps(index)}>
               <div className="rule" />
               <div className="role">
                 <div>
@@ -218,7 +225,7 @@ export default function App() {
         </div>
         <div className="rule inset" />
         <div className="learning">
-          <div>
+          <div {...motionProps(0)}>
             <p className="eyebrow">Learning</p>
             <p>
               UI/UX Design Training
@@ -226,7 +233,7 @@ export default function App() {
               Udemy
             </p>
           </div>
-          <div>
+          <div {...motionProps(1)}>
             <p className="eyebrow">Tools & inspiration</p>
             <p className="tools">
               Figma / FigJam / Pinterest /
@@ -238,13 +245,13 @@ export default function App() {
       </section>
 
       <footer className="contact" id="contact">
-        <div className="contact-intro">
+        <div className="contact-intro" {...motionProps(0)}>
           <Chapter number="08 /" label="The next chapter" />
           <p>
             Have a product in mind, a tricky workflow, or just a good question? Let’s start a conversation.
           </p>
         </div>
-        <div className="closing">
+        <div className="closing" {...motionProps(1)}>
           <h2>
             Let’s make
             <br />
@@ -254,7 +261,7 @@ export default function App() {
             <Icon name="arrow-up-right-light.svg" width={80} height={80} />
           </a>
         </div>
-        <div className="contact-details">
+        <div className="contact-details" {...motionProps(2)}>
           <div>
             <p className="eyebrow">Say hello</p>
             <a className="email" href={`mailto:${profile.email}`}>
@@ -274,7 +281,7 @@ export default function App() {
           </p>
         </div>
         <div className="rule" />
-        <div className="footer-bar">
+        <div className="footer-bar" {...motionProps(3)}>
           <p>© 2026 SAMUEL ASARE</p>
         </div>
       </footer>
@@ -283,9 +290,12 @@ export default function App() {
   );
 }
 
-function Chapter({ number, label, tone }) {
+function Chapter({ number, label, tone, motion = false }) {
   return (
-    <p className={tone === "lime" ? "chapter chapter-lime" : "chapter"}>
+    <p
+      className={tone === "lime" ? "chapter chapter-lime" : "chapter"}
+      {...(motion ? motionProps(0) : {})}
+    >
       <span>{number}</span>
       <span>{label}</span>
     </p>
