@@ -1,11 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { Icon } from "./ui";
 
-export function Loader() {
+const SPIN_FALLBACK_MS = 3200;
+
+export function Loader({ onDone }) {
   const [phase, setPhase] = useState("spin");
   const markRef = useRef(null);
   const spinRef = useRef(null);
   const screenRef = useRef(null);
+  const onDoneRef = useRef(onDone);
+
+  onDoneRef.current = onDone;
 
   useEffect(() => {
     const root = document.documentElement;
@@ -13,6 +18,7 @@ export function Loader() {
 
     if (reduceMotion) {
       root.classList.remove("is-loading");
+      onDoneRef.current?.();
       setPhase("done");
       return undefined;
     }
@@ -20,7 +26,9 @@ export function Loader() {
     root.classList.add("is-loading");
     const spin = spinRef.current;
     let finished = false;
+    let travelStarted = false;
     let fallbackId = 0;
+    let spinFallbackId = 0;
     let screenEl = null;
     let onScreenFadeEnd = null;
 
@@ -28,10 +36,16 @@ export function Loader() {
       if (finished) return;
       finished = true;
       window.clearTimeout(fallbackId);
+      window.clearTimeout(spinFallbackId);
+      root.classList.remove("is-loading");
+      onDoneRef.current?.();
       setPhase("done");
     }
 
     function beginTravel() {
+      if (finished || travelStarted) return;
+      travelStarted = true;
+      window.clearTimeout(spinFallbackId);
       const mark = markRef.current;
       const target = document.querySelector(".intro .signature");
       const targetRect = target?.getBoundingClientRect();
@@ -81,12 +95,19 @@ export function Loader() {
       beginTravel();
     }
 
-    spin.addEventListener("animationend", onSpinEnd);
+    if (!spin) {
+      beginTravel();
+    } else {
+      spin.addEventListener("animationend", onSpinEnd);
+      spinFallbackId = window.setTimeout(beginTravel, SPIN_FALLBACK_MS);
+    }
     return () => {
       finished = true;
       window.clearTimeout(fallbackId);
-      spin.removeEventListener("animationend", onSpinEnd);
+      window.clearTimeout(spinFallbackId);
+      spin?.removeEventListener("animationend", onSpinEnd);
       screenEl?.removeEventListener("transitionend", onScreenFadeEnd);
+      root.classList.remove("is-loading");
     };
   }, []);
 

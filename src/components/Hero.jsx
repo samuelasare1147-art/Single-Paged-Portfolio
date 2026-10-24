@@ -1,4 +1,3 @@
-import { SiteHeader } from "./SiteHeader";
 import { profile } from "../data/content";
 import { motionProps } from "./sectionMotion";
 import { Icon, Pill } from "./ui";
@@ -6,8 +5,6 @@ import { Icon, Pill } from "./ui";
 export function Hero() {
   return (
     <section className="intro" id="top">
-      <SiteHeader />
-      <div className="rule" />
       <div className="edition" {...motionProps(0)}>
         <p>Independent perspective</p>
         <p>Folio / 2026</p>

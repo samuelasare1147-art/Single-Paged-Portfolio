@@ -8,6 +8,7 @@ export function SiteHeader({ fixed = false, shown = false, onOpenChange }) {
   const [open, setOpen] = useState(false);
   const openRef = useRef(false);
   const onOpenChangeRef = useRef(onOpenChange);
+  const headerRef = useRef(null);
   const menuId = fixed ? "mobile-menu-fixed" : "mobile-menu";
   const revealed = fixed ? shown : true;
 
@@ -31,8 +32,17 @@ export function SiteHeader({ fixed = false, shown = false, onOpenChange }) {
     onOpenChangeRef.current?.(false);
   }, [fixed, shown]);
 
+  useEffect(() => {
+    if (!fixed || shown) return;
+    const header = headerRef.current;
+    if (header?.contains(document.activeElement)) {
+      document.activeElement.blur();
+    }
+  }, [fixed, shown]);
+
   return (
     <header
+      ref={headerRef}
       className={fixed ? `nav is-fixed${revealed ? " is-shown" : ""}` : "nav"}
       inert={fixed && !revealed ? true : undefined}
     >
@@ -74,14 +84,34 @@ export function SiteHeader({ fixed = false, shown = false, onOpenChange }) {
   );
 }
 
+function heroInView() {
+  const hero = document.getElementById("top");
+  if (!hero) return window.scrollY < 120;
+  return hero.getBoundingClientRect().bottom > 1;
+}
+
 export function FixedSiteHeader() {
-  const [shown, setShown] = useState(false);
+  const [shown, setShown] = useState(true);
   const menuOpenRef = useRef(false);
   const idleRef = useRef(0);
+  const shownRef = useRef(true);
+
+  function showNav() {
+    if (shownRef.current) return;
+    shownRef.current = true;
+    setShown(true);
+  }
+
+  function hideNav() {
+    if (menuOpenRef.current || !shownRef.current) return;
+    shownRef.current = false;
+    setShown(false);
+  }
 
   useEffect(() => {
-    let lastY = window.scrollY;
+    let anchorY = window.scrollY;
     let frame = 0;
+    let heroWasInView = heroInView();
 
     function clearIdle() {
       window.clearTimeout(idleRef.current);
@@ -90,15 +120,8 @@ export function FixedSiteHeader() {
     function armIdle() {
       clearIdle();
       idleRef.current = window.setTimeout(() => {
-        if (!menuOpenRef.current) setShown(false);
+        if (!menuOpenRef.current && !heroInView()) hideNav();
       }, HIDE_AFTER_MS);
-    }
-
-    function inFlowStillVisible() {
-      const header = document.querySelector(".intro .nav");
-      if (!header) return window.scrollY < 120;
-      const top = header.getBoundingClientRect().top + window.scrollY;
-      return window.scrollY <= top + header.offsetHeight;
     }
 
     function onScroll() {
@@ -106,31 +129,44 @@ export function FixedSiteHeader() {
       frame = window.requestAnimationFrame(() => {
         frame = 0;
         const y = window.scrollY;
-
-        if (inFlowStillVisible()) {
-          lastY = y;
-          clearIdle();
-          setShown(false);
-          return;
-        }
+        const delta = y - anchorY;
+        const onHero = heroInView();
+        const enteredHero = onHero && !heroWasInView;
+        heroWasInView = onHero;
 
         if (menuOpenRef.current) {
-          lastY = y;
+          anchorY = y;
           clearIdle();
-          setShown(true);
+          showNav();
           return;
         }
 
-        const delta = y - lastY;
-        if (Math.abs(delta) < 4) return;
-        lastY = y;
-
-        if (delta < 0) {
-          setShown(true);
-          armIdle();
-        } else {
+        // Downward movement hides immediately, even while the hero is
+        // still on screen. Sub-4px jitter does not count as a gesture.
+        if (delta > 4) {
+          anchorY = y;
           clearIdle();
-          setShown(false);
+          hideNav();
+          return;
+        }
+
+        // Upward movement slides the nav back in. On the hero it stays;
+        // below the hero it hides again after the idle delay.
+        if (delta < -4) {
+          anchorY = y;
+          showNav();
+          if (onHero) clearIdle();
+          else armIdle();
+          return;
+        }
+
+        // Resting on the hero, or drifting back onto it: no idle hide.
+        if (onHero) {
+          clearIdle();
+          if (enteredHero) {
+            anchorY = y;
+            showNav();
+          }
         }
       });
     }
@@ -147,11 +183,12 @@ export function FixedSiteHeader() {
     menuOpenRef.current = open;
     window.clearTimeout(idleRef.current);
     if (open) {
-      setShown(true);
+      showNav();
       return;
     }
+    if (heroInView()) return;
     idleRef.current = window.setTimeout(() => {
-      if (!menuOpenRef.current) setShown(false);
+      if (!menuOpenRef.current && !heroInView()) hideNav();
     }, HIDE_AFTER_MS);
   }
 

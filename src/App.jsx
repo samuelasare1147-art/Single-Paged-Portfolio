@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { BackToTop } from "./components/BackToTop";
 import { FixedSiteHeader } from "./components/SiteHeader";
 import { Hero } from "./components/Hero";
@@ -22,11 +23,13 @@ const previews = {
 };
 
 export default function App() {
+  const [loading, setLoading] = useState(true);
   useSectionReveal();
 
   return (
     <>
-      <Loader />
+      <Loader onDone={() => setLoading(false)} />
+      <div className="page" inert={loading ? true : undefined}>
       <FixedSiteHeader />
       <Hero />
 
@@ -286,6 +289,7 @@ export default function App() {
         </div>
       </footer>
       <BackToTop />
+      </div>
     </>
   );
 }

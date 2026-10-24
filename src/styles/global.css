@@ -28,16 +28,21 @@ body {
 
 @media (prefers-reduced-motion: no-preference) {
   [data-reveal] {
+    visibility: hidden;
     opacity: 0;
+    pointer-events: none;
     transform: translateY(28px);
     transition:
       opacity 0.7s ease,
-      transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+      transform 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+      visibility 0s linear;
     transition-delay: var(--reveal-delay, 0ms);
   }
 
   [data-reveal].is-in {
+    visibility: visible;
     opacity: 1;
+    pointer-events: auto;
     transform: translateY(0);
   }
 }
@@ -201,7 +206,7 @@ h2 {
   display: flex;
   flex-direction: column;
   gap: 32px;
-  padding: 32px var(--pad) 0;
+  padding: 116px var(--pad) 0;
 }
 
 .nav {
@@ -282,7 +287,8 @@ h2 {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .nav.is-fixed {
+  .nav.is-fixed,
+  .nav.is-fixed.is-shown {
     transform: none;
     transition: none;
   }
@@ -490,8 +496,14 @@ figcaption {
   cursor: pointer;
 }
 
-.scroll-hint:hover {
+.scroll-hint:hover,
+.scroll-hint:focus-visible {
   color: var(--ink);
+}
+
+.scroll-hint:focus-visible {
+  outline: 1px solid var(--ink);
+  outline-offset: 4px;
 }
 
 /* Perspective and shared sections */
@@ -1408,7 +1420,9 @@ figcaption {
   }
 
   .scroll-hint {
-    display: none;
+    justify-self: start;
+    padding: 8px 0;
+    text-align: left;
   }
 
   .transit {
@@ -1638,7 +1652,7 @@ figcaption {
 @media (max-width: 760px) {
   .intro {
     gap: 0;
-    padding-top: 0;
+    padding-top: 80px;
   }
 
   .nav {
