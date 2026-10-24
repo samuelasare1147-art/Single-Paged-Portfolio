@@ -1,3 +1,4 @@
+import { BackToTop } from "./components/BackToTop";
 import { Hero } from "./components/Hero";
 import { ArrowLink } from "./components/ui";
 import { Icon } from "./components/ui";
@@ -275,9 +276,9 @@ export default function App() {
         <div className="rule" />
         <div className="footer-bar">
           <p>© 2026 SAMUEL ASARE</p>
-          <a href="#top">BACK TO TOP ↑</a>
         </div>
       </footer>
+      <BackToTop />
     </>
   );
 }
